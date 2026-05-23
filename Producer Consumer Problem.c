@@ -1,81 +1,94 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int n = 0, buffersize = 0, currentsize = 0;
+int current_size = 0, buffersize = 0;
 
-void producer()
-{
-    printf("\nEnter number of elements to be produced: ");
+// Producer Function
+void producer() {
+    int n;
+
+    printf("Enter the products to be produced: ");
     scanf("%d", &n);
 
-    if ((currentsize + n) <= buffersize)
-    {
-        currentsize += n;
-        printf("%d elements produced. Current buffer size: %d\n",
-               n, currentsize);
+    if ((current_size + n) <= buffersize) {
+        current_size += n;
+
+        printf("The units produced = %d\n", n);
+        printf("Current buffer size = %d\n", current_size);
     }
-    else
-    {
-        printf("\nBuffer is not sufficient (Overflow condition)\n");
+    else {
+        printf("Buffer Overflow\n");
     }
 }
 
-void consumer()
-{
+// Consumer Function
+void consumer() {
     int x;
-    printf("\nEnter number of elements to be consumed: ");
+
+    printf("Enter the units to consume: ");
     scanf("%d", &x);
 
-    if (currentsize >= x)
-    {
-        currentsize -= x;
-        printf("%d elements consumed. Elements left: %d\n",
-               x, currentsize);
+    if (x <= current_size) {
+        current_size -= x;
+
+        printf("%d units consumed\n", x);
+        printf("Current buffer size = %d\n", current_size);
     }
-    else
-    {
-        printf("\nBuffer is empty or insufficient elements (Underflow condition)\n");
+    else {
+        printf("Buffer Underflow\n");
     }
 }
 
-int main()
-{
+int main() {
+
     int choice;
 
-    printf("Enter maximum buffer size: ");
+    printf("Enter the buffer size: ");
     scanf("%d", &buffersize);
 
-    do
-    {
-        printf("\n1. Producer\n2. Consumer\n3. Exit");
+    while (1) {
+
+        printf("\n1. PRODUCER");
+        printf("\n2. CONSUMER");
+        printf("\n3. EXIT");
         printf("\nEnter your choice: ");
+
         scanf("%d", &choice);
 
-        switch (choice)
-        {
+        switch(choice) {
+
             case 1:
-                if (currentsize == buffersize)
-                    printf("\nBuffer is full. Cannot produce.\n");
-                else
+
+                if (current_size == buffersize) {
+                    printf("Buffer is FULL\n");
+                }
+                else {
                     producer();
+                }
+
                 break;
 
             case 2:
-                if (currentsize == 0)
-                    printf("\nBuffer is empty. Cannot consume.\n");
-                else
+
+                if (current_size == 0) {
+                    printf("Buffer is EMPTY\n");
+                }
+                else {
                     consumer();
+                }
+
                 break;
 
             case 3:
-                printf("\nExiting program...\n");
-                break;
+
+                printf("Exiting Program...\n");
+                exit(0);
 
             default:
-                printf("\nInvalid choice!\n");
-        }
 
-    } while (choice != 3);
+                printf("Invalid Input\n");
+        }
+    }
 
     return 0;
 }
