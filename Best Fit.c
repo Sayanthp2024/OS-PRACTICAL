@@ -1,46 +1,64 @@
-#include<stdio.h>
-void main()
-{
-int fragment[20], b[20], p[20], i, j, nb, np, temp, lowest = 9999;
-static int barray[20], parray[20];
+// Best Fit Memory Allocation
 
-printf("\n\tMemory Management Scheme - Best Fit");  
-printf("\nEnter the number of blocks: ");  
-scanf("%d", &nb);  
-printf("Enter the number of processes: ");  
-scanf("%d", &np);  
-  
-printf("\nEnter the size of the blocks:-\n");  
-for(i = 1; i <= nb; i++) {  
-    printf("Block no.%d: ", i);  
-    scanf("%d", &b[i]);  
-}  
-  
-printf("\nEnter the size of the processes:-\n");  
-for(i = 1; i <= np; i++) {  
-    printf("Process no.%d: ", i);  
-    scanf("%d", &p[i]);  
-}  
+#include <stdio.h>
 
-for(i = 1; i <= np; i++) {  
-    for(j = 1; j <= nb; j++) {  
-        if(barray[j] != 1) {  
-            temp = b[j] - p[i];  
-            if(temp >= 0) {  
-                if(lowest > temp) {  
-                    parray[i] = j;  
-                    lowest = temp;  
-                }  
-            }  
-        }  
-    }  
-    fragment[i] = lowest;  
-    barray[parray[i]] = 1;  
-    lowest = 10000;  
-}  
+int main() {
+    int bsize[10], psize[10], allocation[10];
+    int bno, pno, i, j, best;
 
-printf("\nProcess_no\tProcess_size\tBlock_no\tBlock_size\tFragment");  
-for(i = 1; i <= np && parray[i] != 0; i++)  
-    printf("\n%d\t\t%d\t\t%d\t\t%d\t\t%d", i, p[i], parray[i], b[parray[i]], fragment[i]);
+    printf("Enter number of blocks: ");
+    scanf("%d", &bno);
 
+    printf("Enter block sizes:\n");
+    for(i = 0; i < bno; i++)
+        scanf("%d", &bsize[i]);
+
+    printf("Enter number of processes: ");
+    scanf("%d", &pno);
+
+    printf("Enter process sizes:\n");
+    for(i = 0; i < pno; i++)
+        scanf("%d", &psize[i]);
+
+    // Initialize allocation
+    for(i = 0; i < pno; i++)
+        allocation[i] = -1;
+
+    // Best Fit Allocation
+    for(i = 0; i < pno; i++) {
+
+        best = -1;
+
+        for(j = 0; j < bno; j++) {
+
+            if(bsize[j] >= psize[i]) {
+
+                if(best == -1)
+                    best = j;
+
+                else if(bsize[best] > bsize[j])
+                    best = j;
+            }
+        }
+
+        if(best != -1) {
+            allocation[i] = best;
+
+            bsize[best] -= psize[i];
+        }
+    }
+
+    printf("\nProcess No\tProcess Size\tBlock No\n");
+
+    for(i = 0; i < pno; i++) {
+
+        printf("%d\t\t%d\t\t", i + 1, psize[i]);
+
+        if(allocation[i] != -1)
+            printf("%d\n", allocation[i] + 1);
+        else
+            printf("Not Allocated\n");
+    }
+
+    return 0;
 }
