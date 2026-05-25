@@ -1,10 +1,11 @@
-//CSCAN DISK SCHEDULING ALGORITHM
+// C-SCAN Disk Scheduling with Head Movement Count
+
 #include <stdio.h>
 
 int main() {
     int req[20], n, head, i, j, temp;
-    int seek = 0, diff;
-    int pos;
+    int seek = 0, diff, pos;
+    int count = 0;
 
     printf("Enter number of requests: ");
     scanf("%d", &n);
@@ -35,33 +36,42 @@ int main() {
         }
     }
 
-    printf("Seek Sequence: %d ", head);
+    printf("\nSeek Sequence: %d ", head);
 
     // Move right
     for(i = pos; i < n; i++) {
+
         diff = req[i] - head;
-        seek += diff;
+
+        seek = seek + diff;
+        count++;
+
         head = req[i];
 
         printf("-> %d ", head);
     }
 
     // Jump to beginning
-    seek += head;   // from current position to 0
+    seek = seek + head;
     head = 0;
 
     printf("-> %d ", head);
 
-    // Continue from beginning
+    // Move right again
     for(i = 0; i < pos; i++) {
+
         diff = req[i] - head;
-        seek += diff;
+
+        seek = seek + diff;
+        count++;
+
         head = req[i];
 
         printf("-> %d ", head);
     }
 
-    printf("\nTotal Seek Time = %d", seek);
+    printf("\n\nTotal Seek Time = %d", seek);
+    printf("\nHead Movement Count = %d", count);
 
     return 0;
 }
