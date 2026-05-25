@@ -1,9 +1,10 @@
-// SCAN Disk Scheduling without abs()
+// SCAN Disk Scheduling with Head Movement Count
 
 #include <stdio.h>
 
 int main() {
-    int req[20], n, head, i, j, temp, diff, seek = 0;
+    int req[20], n, head, i, j, temp, diff;
+    int seek = 0, count = 0;
 
     printf("Enter number of requests: ");
     scanf("%d", &n);
@@ -26,7 +27,7 @@ int main() {
         }
     }
 
-    printf("Seek Sequence: %d ", head);
+    printf("\nSeek Sequence: %d ", head);
 
     // Move right
     for(i = 0; i < n; i++) {
@@ -35,6 +36,8 @@ int main() {
             diff = req[i] - head;
 
             seek = seek + diff;
+            count++;
+
             head = req[i];
 
             printf("-> %d ", head);
@@ -48,13 +51,16 @@ int main() {
             diff = head - req[i];
 
             seek = seek + diff;
+            count++;
+
             head = req[i];
 
             printf("-> %d ", head);
         }
     }
 
-    printf("\nTotal Seek Time = %d", seek);
+    printf("\n\nTotal Seek Time = %d", seek);
+    printf("\nHead Movement Count = %d", count);
 
     return 0;
 }
