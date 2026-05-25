@@ -1,9 +1,10 @@
-// C-SCAN Disk Scheduling without abs()
-
+//CSCAN DISK SCHEDULING ALGORITHM
 #include <stdio.h>
 
 int main() {
-    int req[20], n, head, i, j, temp, diff, seek = 0;
+    int req[20], n, head, i, j, temp;
+    int seek = 0, diff;
+    int pos;
 
     printf("Enter number of requests: ");
     scanf("%d", &n);
@@ -26,32 +27,38 @@ int main() {
         }
     }
 
-    printf("Seek Sequence: %d ", head);
-
-    // Move right
+    // Find first request greater than head
     for(i = 0; i < n; i++) {
         if(req[i] >= head) {
-
-            diff = req[i] - head;
-
-            seek = seek + diff;
-            head = req[i];
-
-            printf("-> %d ", head);
+            pos = i;
+            break;
         }
     }
 
-    // Jump and continue
-    for(i = 0; i < n; i++) {
-        if(req[i] < head) {
+    printf("Seek Sequence: %d ", head);
 
-            diff = head - req[i];
+    // Move right
+    for(i = pos; i < n; i++) {
+        diff = req[i] - head;
+        seek += diff;
+        head = req[i];
 
-            seek = seek + diff;
-            head = req[i];
+        printf("-> %d ", head);
+    }
 
-            printf("-> %d ", head);
-        }
+    // Jump to beginning
+    seek += head;   // from current position to 0
+    head = 0;
+
+    printf("-> %d ", head);
+
+    // Continue from beginning
+    for(i = 0; i < pos; i++) {
+        diff = req[i] - head;
+        seek += diff;
+        head = req[i];
+
+        printf("-> %d ", head);
     }
 
     printf("\nTotal Seek Time = %d", seek);
